@@ -1,6 +1,6 @@
 <?php
 
-use Sail\Foundation\Container;
+use SailPHP\Foundation\Container;
 
 function container($make = null)
 {

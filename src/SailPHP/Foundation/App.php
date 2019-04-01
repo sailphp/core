@@ -6,7 +6,7 @@
  * Time: 10:59 AM
  */
 
-namespace Sail\Foundation;
+namespace SailPHP\Foundation;
 
 use Dotenv\Dotenv;
 use InvalidArgumentException;
