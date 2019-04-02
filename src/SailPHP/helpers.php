@@ -41,6 +41,11 @@ function url($name, $requirements = [])
     return route()->path($name, $requirements);
 }
 
+function addViewGlobal($name, $value)
+{
+    return container('template')->addGlobal($name, $value);
+}
+
 function view($name, $parameters = array())
 {
     return container('template')->render($name, $parameters);
