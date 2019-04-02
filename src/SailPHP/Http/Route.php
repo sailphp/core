@@ -63,6 +63,34 @@ class Route
         // @todo middleware
         $response = call_user_func_array([$controller, $method], $params);
 
-
     }
+
+    public static function get($path, $name, $controller)
+    {
+        $options = [
+            'name'  => $name,
+            'controller'    => $controller
+        ];
+        
+        route()->route('GET', $path, $options);
+        return route();
+    }
+
+    public static function post($path, $name, $controller)
+    {
+        $options = [
+            'name'  => $name,
+            'controller'    => $controller
+        ];
+
+        route()->route('POST', $path, $options);
+        return route();
+    }
+
+    public static function group(array $attributes, \Closure $callback)
+    {
+        route()->group($attributes, $callback);
+    }
+
+
 }

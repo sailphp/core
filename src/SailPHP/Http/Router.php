@@ -42,6 +42,40 @@ class Router extends RouteCollection
         'delete' => ['DELETE', '/{id}'],
     ];
 
+    protected $groupStack = array();
+
+    /**
+     * @param array $attributes
+     */
+    public function updateGroupStack(array $attributes)
+    {
+        $this->groupStack = $attributes;
+    }
+
+    /**
+     * @return mixed|string
+     */
+    public function getGroupPrefix()
+    {
+        return isset($this->groupStack['prefix']) ? $this->groupStack['prefix'] : '';
+    }
+
+    /**
+     * @param $uri
+     * @return string
+     */
+    protected function prefix($uri)
+    {
+        return '/' . trim(trim($this->getGroupPrefix(), '/') . '/' . trim($uri, '/'), '/') ? : '/';
+    }
+
+    public function group(array $attributes, \Closure $callback)
+    {
+        $this->updateGroupStack($attributes);
+        call_user_func($callback, $this);
+        array_pop($this->groupStack);
+    }
+
     /**
      * Handle calling get(), post(), put(), delete() etc
      * on this router.
@@ -59,6 +93,9 @@ class Router extends RouteCollection
         if (!in_array($method, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'])) {
             throw new UnsupportedMethodException($method);
         }
+        $path = str_replace('[int]', '<\d+>', $path);
+        $path = $this->prefix($path);
+
         $routeName = $options['name'];
         $options = ['controller' => $options['controller']];
         $route = new Route($path, $options, [], [], '', [], [strtoupper($method)]);
@@ -66,6 +103,9 @@ class Router extends RouteCollection
 
         return $this;
     }
+
+
+
     /**
      * Add a resource route using CRUD/REST
      * endpoint patterns and request methods.
