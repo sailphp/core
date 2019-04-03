@@ -31,4 +31,10 @@ class Response extends SymfonyResponse
         $httpFoundationFactory = new HttpFoundationFactory();
         return $httpFoundationFactory->createResponse($response);
     }
+
+    public function redirect($url)
+    {
+        header("Location: ".$url);
+        return true;
+    }
 }

@@ -12,6 +12,7 @@
     "illuminate/config": "~5.8",
     "illuminate/database": "~5.8",
     "relay/relay": "^2.0",
+    "respect/validation": "^1.1",
     "symfony/console": "^4.2",
     "symfony/dependency-injection": "^3.1",
     "symfony/filesystem": "^3.1",

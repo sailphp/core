@@ -1,6 +1,7 @@
 <?php
 
 use SailPHP\Foundation\Container;
+use Respect\Validation\Validator;
 
 function container($make = null)
 {
@@ -58,4 +59,29 @@ function paths($key = false)
         return rtrim($paths[$key], '/');
     }
     return $paths;
+}
+
+function validate()
+{
+    return Validator::class;
+}
+
+function redirect($url)
+{
+    return response()->redirect($url);
+}
+
+function input($name, $clean = true)
+{
+    $input = request()->get($name);
+    if($clean) {
+        $input = clean($input);
+    }
+
+    return $input;
+}
+
+function clean($key)
+{
+    return trim(addslashes(htmlentities($key)));
 }
