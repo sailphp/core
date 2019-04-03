@@ -31,6 +31,7 @@ class Validator
         return $this;
     }
 
+    
     public function failed()
     {
         return !empty($this->errors);
