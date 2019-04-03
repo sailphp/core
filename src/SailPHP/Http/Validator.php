@@ -27,11 +27,16 @@ class Validator
             }
         }
 
+        session()->put('_errors', $this->errors);
 
         return $this;
     }
 
-    
+    public function errors()
+    {
+        return $this->errors;
+    }
+
     public function failed()
     {
         return !empty($this->errors);

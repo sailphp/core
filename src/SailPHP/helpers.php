@@ -85,3 +85,8 @@ function clean($key)
 {
     return trim(addslashes(htmlentities($key)));
 }
+
+function session()
+{
+    return container('session');
+}
