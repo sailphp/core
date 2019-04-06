@@ -110,3 +110,13 @@ function user()
 
     return auth()->user();
 }
+
+function public_path()
+{
+    return paths('public').'/';
+}
+
+function asset_path()
+{
+    return public_path().'assets/';
+}
