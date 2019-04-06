@@ -90,3 +90,8 @@ function session()
 {
     return container('session');
 }
+
+function auth()
+{
+    return container('auth');
+}

@@ -1,0 +1,76 @@
+<?php
+
+
+namespace SailPHP\Auth;
+
+
+use SailPHP\Exception\NoAuthableLoggedInException;
+use SailPHP\Session\Session;
+
+class SessionAuthAdapter implements AuthAdapter
+{
+    protected $config = [];
+    protected $session;
+
+    public function setConfig(array $config)
+    {
+        $this->config = $config;
+    }
+
+    public function setSession(Session $session)
+    {
+        $this->session = $session;
+    }
+
+    public function login(Authable $authable)
+    {
+        if($this->loggedIn()) {
+            return $this->getUser();
+        }
+
+        $data = $this->session->serialize($authable->serialize());
+
+        $this->session->put($this->config['session_key'], $data);
+
+        return $authable;
+    }
+
+    public function loggedIn()
+    {
+        return $this->session->has($this->config['session_key']);
+    }
+
+    public function user()
+    {
+       if(!$this->loggedIn()) {
+           throw new NoAuthableLoggedInException;
+       }
+
+       return $this->getUser();
+    }
+
+    private function getUser()
+    {
+        $data = $this->session->get($this->config['session_key']);
+
+        try {
+            $unserialised = $this->session->unserialize($data);
+
+            if(!isset($unserialised->id)) {
+                throw new \Exception;
+            }
+
+            $model = $this->config['auth_model'];
+
+            $user = $model::where('id', $unserialised->id)->first();
+
+            if(!($user instanceof Authable)) {
+                throw new \Exception;
+            }
+        } catch(\Exception $e) {
+            throw new NoAuthableLoggedInException;
+        }
+
+        return $user;
+    }
+}

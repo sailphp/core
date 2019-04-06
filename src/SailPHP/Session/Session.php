@@ -22,4 +22,14 @@ class Session
     {
         $this->adapter = $adapter;
     }
+
+    public function serialize($data)
+    {
+        return serialize($data);
+    }
+
+    public function unserialize($text)
+    {
+        return unserialize($text);
+    }
 }
