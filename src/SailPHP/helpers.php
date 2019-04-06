@@ -68,7 +68,8 @@ function validate()
 
 function redirect($url)
 {
-    return response()->redirect($url);
+    header("Location: ".$url);
+    return;
 }
 
 function input($name, $clean = true)
