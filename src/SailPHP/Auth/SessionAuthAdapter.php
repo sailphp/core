@@ -73,4 +73,15 @@ class SessionAuthAdapter implements AuthAdapter
 
         return $user;
     }
+
+    public function logout()
+    {
+        if(!$this->loggedIn()) {
+            return false;
+        }
+
+        $this->session->delete($this->config['session_key']);
+
+        return true;
+    }
 }
