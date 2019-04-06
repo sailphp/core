@@ -96,3 +96,17 @@ function auth()
 {
     return container('auth');
 }
+
+function loggedIn()
+{
+    return auth()->loggedIn();
+}
+
+function user()
+{
+    if(!loggedIn()) {
+        return null;
+    }
+
+    return auth()->user();
+}
