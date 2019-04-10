@@ -37,7 +37,8 @@ class Response extends SymfonyResponse
     {
         $json = json_encode($data, JSON_PRETTY_PRINT);
         $this->headers->set('Content-Type', 'application/json');
-        return $this->setContent($json);
+        $this->setContent($json);
+        return $this->send();
     }
 
     public function redirect($url)
