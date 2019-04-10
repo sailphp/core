@@ -15,7 +15,7 @@ class Validator
 
     protected $errors = [];
 
-    public function validate(Request $request, array $rules)
+    public function validate(Request $request, array $rules, $session = true)
     {
         foreach($rules as $field => $rule)
         {
@@ -27,8 +27,9 @@ class Validator
             }
         }
 
-        session()->put('_errors', $this->errors);
-
+        if($session) {
+            session()->put('_errors', $this->errors);
+        }
         return $this;
     }
 
