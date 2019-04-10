@@ -45,6 +45,11 @@ class Template
         });
         $this->twig->addFunction($function);
 
+        // User
+        $function = new \Twig\TwigFunction('user', function($var) {
+            return user()->$var;
+        });
+        $this->twig->addFunction($function);
     }
 
     public function addGlobal($name, $data)
