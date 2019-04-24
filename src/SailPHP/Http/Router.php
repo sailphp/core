@@ -9,6 +9,7 @@
 namespace SailPHP\Http;
 
 
+use SailPHP\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
