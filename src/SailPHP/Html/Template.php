@@ -56,6 +56,12 @@ class Template
     {
         $this->twig->addGlobal($name, $data);
     }
+
+    public function addFunction($name, $func) {
+        $function = new \Twig\TwigFunction($name, $func);
+
+        $this->twig->addFunction($function);
+    }
     
     public function render($file, $parameters = array())
     {
