@@ -62,7 +62,12 @@ class SessionAuthAdapter implements AuthAdapter
 
             $model = $this->config['auth_model'];
 
-            $user = $model::where('id', $unserialised->id)->first();
+
+            if(method_exists($model, 'byId')) {
+                $user = $model::byId($unserialised->id);
+            } else {
+                $user = $model::where('id', $unserialised->id)->first();
+            }
 
             if(!($user instanceof Authable)) {
                 throw new \Exception;
