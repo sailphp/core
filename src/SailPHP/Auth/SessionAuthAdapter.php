@@ -73,7 +73,8 @@ class SessionAuthAdapter implements AuthAdapter
                 throw new \Exception;
             }
         } catch(\Exception $e) {
-            throw new NoAuthableLoggedInException;
+            $this->logout();
+            return null;
         }
 
         return $user;
