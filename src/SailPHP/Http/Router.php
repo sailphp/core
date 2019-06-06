@@ -43,8 +43,11 @@ class Router extends RouteCollection
         'delete' => ['DELETE', '/{id}'],
     ];
 
+    protected $path = null;
+
     protected $groupStack = array();
 
+    private $middlewares = [];
     /**
      * @param array $attributes
      */
@@ -101,7 +104,7 @@ class Router extends RouteCollection
         $options = ['controller' => $options['controller']];
         $route = new Route($path, $options, [], [], '', [], [strtoupper($method)]);
         $this->add($routeName, $route);
-
+        $this->path = $path;
         return $this;
     }
 
@@ -154,12 +157,53 @@ class Router extends RouteCollection
         $path = $request->getPathInfo();
         $matcher = new UrlMatcher($this, $context);
 
+
+        $this->matchMiddleware($path);
+
         try {
             return $matcher->match($path);
         } catch (ResourceNotFoundException $e) {
             throw new NotFoundException($path);
         }
     }
+
+    private function matchMiddleware($path)
+    {
+        if(!array_key_exists($path, $this->middlewares)) {
+            return;
+        }
+
+        $middlewares = $this->middlewares[$path];
+        return $this->sortMiddleware($middlewares);
+    }
+
+    private function sortMiddleware($middlewares = array())
+    {
+        $appMiddlewares = container('app')->middlewares();
+        if(empty($middlewares) || empty($appMiddlewares)) {
+            return;
+        }
+        
+        
+        foreach($middlewares as $middleware) {
+                
+            if(array_key_exists($middleware, $appMiddlewares)) {
+                $mapped = $appMiddlewares[$middleware];
+                if(!is_null($mapped)) {
+                    $this->runMiddleware($mapped, array());
+                }
+            } else {
+                $this->runMiddleware($middleware, array());
+            }
+        }
+    }
+
+    private function runMiddleware($class, $params)
+    {
+        $class = new $class;
+        return call_user_func_array(array($class, 'handle'), $params);
+    }
+
     /**
      * Get the request context for this router.
      *
@@ -190,5 +234,10 @@ class Router extends RouteCollection
             return $generator->generate($name, $requirements);
         }
         return '/';
+    }
+
+    public function middleware($middleware, $params = array()) {
+        $this->middlewares[$this->path] = array($middleware);
+        return $this;
     }
 }

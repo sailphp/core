@@ -21,6 +21,8 @@ class App
 
     private $paths = [];
 
+    private $middlewares = [];
+
     public function __construct(array $paths, array $providers = [])
     {
         $this->setupInitialPaths($paths);
@@ -47,6 +49,11 @@ class App
         return $this->paths;
     }
 
+    public function middlewares()
+    {
+        return $this->middlewares;
+    }
+
     private function setupInitialPaths(array $paths)
     {
         if (! isset($paths['base'], $paths['app'], $paths['public'], $paths['storage'])) {
@@ -61,6 +68,7 @@ class App
 
     public function listen()
     {
+        $this->loadMiddlewares();
         $this->loadRouteFiles();
 
         $match = $this->container->get('router')->match($this->container->get('request'));
@@ -77,6 +85,15 @@ class App
         $content = $response->getContent();
 
         $response->setContent($content)->send();
+    }
+
+    private function loadMiddlewares()
+    {
+        if(file_exists($this->paths['app'] . '/middlewares.php')) {
+            $this->middlewares = include_once($this->paths['app'] . '/middlewares.php');
+        } else {
+            $this->middlewares = array();
+        }
     }
 
     private function loadRouteFiles()

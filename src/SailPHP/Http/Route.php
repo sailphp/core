@@ -18,6 +18,8 @@ class Route
 {
     private $controller;
 
+    private $path;
+
     private $method;
 
     private $middleware;
@@ -55,14 +57,7 @@ class Route
         unset($this->match['controller'], $this->match['_route']);
 
         $params = $this->match;
-        return $this->processMiddleware($controller, $method, $params);
-    }
-
-    private function processMiddleware(Controller $controller, $method, $params)
-    {
-        // @todo middleware
-        $response = call_user_func_array([$controller, $method], $params);
-
+        return call_user_func_array([$controller, $method], $params);
     }
 
     public static function get($path, $name, $controller)
@@ -72,8 +67,8 @@ class Route
             'controller'    => $controller
         ];
         
-        route()->route('GET', $path, $options);
-        return route();
+        $route = route()->route('GET', $path, $options);
+        return $route;
     }
 
     public static function post($path, $name, $controller)
@@ -83,8 +78,8 @@ class Route
             'controller'    => $controller
         ];
 
-        route()->route('POST', $path, $options);
-        return route();
+        $route = route()->route('POST', $path, $options);
+        return $route;
     }
 
     public static function group(array $attributes, \Closure $callback)
