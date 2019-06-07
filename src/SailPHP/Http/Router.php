@@ -237,7 +237,11 @@ class Router extends RouteCollection
     }
 
     public function middleware($middleware, $params = array()) {
-        $this->middlewares[$this->path] = array($middleware);
+        if(!array_key_exists($this->path, $this->middlewares)) {
+            $this->middlewares[$this->path] = array();
+        }
+        
+        array_push($this->middlewares[$this->path], $middleware);
         return $this;
     }
 }
