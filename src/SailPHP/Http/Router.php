@@ -98,6 +98,7 @@ class Router extends RouteCollection
             throw new UnsupportedMethodException($method);
         }
         $path = str_replace('[int]', '<\d+>', $path);
+        $path = str_replace('[slug]', '<[a-zA-Z0-9-_]+>', $path);
         $path = $this->prefix($path);
 
         $routeName = $options['name'];
