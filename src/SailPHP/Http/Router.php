@@ -97,8 +97,8 @@ class Router extends RouteCollection
         if (!in_array($method, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'])) {
             throw new UnsupportedMethodException($method);
         }
-        $path = str_replace('[int]', '<\d+>', $path);
-        $path = str_replace('[slug]', '<[a-zA-Z0-9-_]+>', $path);
+        $path = str_replace(':int', '<\d+>', $path);
+        $path = str_replace(':slug', '<[a-zA-Z0-9-_]+>', $path);
         $path = $this->prefix($path);
 
         $routeName = $options['name'];
@@ -108,8 +108,6 @@ class Router extends RouteCollection
         $this->path = $path;
         return $this;
     }
-
-
 
     /**
      * Add a resource route using CRUD/REST
@@ -146,6 +144,7 @@ class Router extends RouteCollection
             ]);
         }
     }
+    
     /**
      * Matches the routes setup by the user against
      * the current request.
