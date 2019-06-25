@@ -163,7 +163,7 @@ class Router extends RouteCollection
         try {
             return $matcher->match($path);
         } catch (ResourceNotFoundException $e) {
-            throw new NotFoundException($path);
+            return false;
         }
     }
 

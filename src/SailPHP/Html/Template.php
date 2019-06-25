@@ -26,6 +26,7 @@ class Template
         $this->twig = new \Twig\Environment($this->loader);
 
         $this->addFunctions();
+        
     }
 
     private function addFunctions()
@@ -61,6 +62,10 @@ class Template
                 return null;
             });
             $this->twig->addFunction($function);
+        }
+        $template = $this;
+        if(file_exists($this->app->getPaths()['app'] . '/template.php')) {
+            require_once($this->app->getPaths()['app'].'/template.php');
         }
     }
 

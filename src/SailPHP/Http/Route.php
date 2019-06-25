@@ -33,7 +33,9 @@ class Route
         $parts = explode('@', $this->match['controller']);
 
         if(!is_array($parts) || count($parts) != 2) {
-            throw new \RuntimeException("Something went wrong.");
+            header("HTTP/1.0 404 Not Found");
+            echo view('errors/404', array());
+            die();
         }
 
         list($this->controller, $this->method) = $parts;

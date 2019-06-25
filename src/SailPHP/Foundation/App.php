@@ -50,15 +50,6 @@ class App
                 $this->container->get('response')
             );
         }
-
-        if($this->container->has('templater')) {
-            $this->container->bind('template', new Template($this));
-            $template = $this->container->get('template');
-            
-            if(file_exists($this->paths['app'] . '/template.php')) {
-                require_once($this->paths['app'].'/template.php');
-            }
-        }
     }
 
     public function has($name)
