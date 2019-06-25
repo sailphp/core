@@ -33,8 +33,7 @@ class Route
         $parts = explode('@', $this->match['controller']);
 
         if(!is_array($parts) || count($parts) != 2) {
-            header("HTTP/1.0 404 Not Found");
-            echo view('errors/404', array());
+            app()->notFound();
             die();
         }
 

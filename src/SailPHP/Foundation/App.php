@@ -73,6 +73,19 @@ class App
         return $this->middlewares;
     }
 
+    public function notFound()
+    {
+        header("HTTP/1.0 404 Not Found");
+        try {
+            echo view('errors/404', array());
+        } catch(\Throwable $e) {
+            header("HTTP/1.0 404 Not Found");
+            echo '<h1>404 Not Found</h1>';
+        }
+        
+        die();
+    }
+
     private function setupInitialPaths(array $paths)
     {
         if (! isset($paths['base'], $paths['app'], $paths['public'], $paths['storage'])) {

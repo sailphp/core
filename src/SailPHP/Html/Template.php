@@ -83,5 +83,7 @@ class Template
     public function render($file, $parameters = array())
     {
         echo $this->twig->render($file.".html", $parameters);
+        
+        return;
     }
 }
