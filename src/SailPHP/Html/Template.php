@@ -10,6 +10,7 @@ namespace SailPHP\Html;
 
 
 use RuntimeException;
+use SailPHP\Foundation\App;
 
 class Template
 {
@@ -17,8 +18,10 @@ class Template
 
     private $twig = null;
 
-    public function __construct()
+    private $app = null;
+    public function __construct(App $app)
     {
+        $this->app = $app;
         $this->loader = new \Twig\Loader\FilesystemLoader(paths('base').'/templates');
         $this->twig = new \Twig\Environment($this->loader);
 
@@ -28,28 +31,37 @@ class Template
     private function addFunctions()
     {
         // Route
-        $function = new \Twig\TwigFunction('route', function() {
-            return route();
-        });
-        $this->twig->addFunction($function);
+        if($this->app->has('router')) {
+            $function = new \Twig\TwigFunction('route', function() {
+                return $this->app->get('router');
+            });
+            $this->twig->addFunction($function);
 
-        // Url
-        $function = new \Twig\TwigFunction('url', function($url, $options = array()) {
-            return url($url, $options);
-        });
-        $this->twig->addFunction($function);
+            // Url
+            $function = new \Twig\TwigFunction('url', function($url, $options = array()) {
+                return $this->app->get('router')->path($url, $options);
+            });
+            $this->twig->addFunction($function);
+        }
 
         // Config
-        $function = new \Twig\TwigFunction('config', function() {
-            return config();
-        });
-        $this->twig->addFunction($function);
+        if($this->app->has('config')) {
+            $function = new \Twig\TwigFunction('config', function() {
+                return $this->app->get('config');
+            });
+            $this->twig->addFunction($function);
+        }
 
         // User
-        $function = new \Twig\TwigFunction('user', function($var) {
-            return user()->$var;
-        });
-        $this->twig->addFunction($function);
+        if($this->app->has('auth')) {
+            $function = new \Twig\TwigFunction('user', function($var) {
+                if($this->app->get('auth')->loggedIn()) {
+                    return user()->$var;
+                }
+                return null;
+            });
+            $this->twig->addFunction($function);
+        }
     }
 
     public function addGlobal($name, $data)

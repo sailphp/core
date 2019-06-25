@@ -10,9 +10,9 @@ namespace SailPHP\Foundation;
 
 use Dotenv\Dotenv;
 use InvalidArgumentException;
-use SailPHP\Http\Route;
 use Symfony\Component\Finder\Finder;
-
+use SailPHP\Http\Route;
+use SailPHP\Html\Template;
 class App
 {
     public $container;
@@ -50,15 +50,26 @@ class App
                 $this->container->get('response')
             );
         }
-        
-        if($this->container->has('template')) {
+
+        if($this->container->has('templater')) {
+            $this->container->bind('template', new Template($this));
             $template = $this->container->get('template');
-            if(file_exists($this->paths['base'] . 'template.php')) {
-                include_once($this->paths['base'].'template.php');
+            
+            if(file_exists($this->paths['app'] . '/template.php')) {
+                require_once($this->paths['app'].'/template.php');
             }
         }
     }
 
+    public function has($name)
+    {
+        return $this->container->has($name);
+    }
+
+    public function get($name)
+    {
+        return $this->container->get($name);
+    }
 
 
     public function getPaths()
