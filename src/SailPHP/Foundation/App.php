@@ -40,6 +40,23 @@ class App
         );
 
         $this->database();
+        // If Session is injected into container, lets call session start
+        if($this->container->has('session')) {
+            $this->container->get('session')->start();
+        }
+        
+        if($this->container->has('cookie')) {
+            $this->container->get('cookie')->setResponse(
+                $this->container->get('response')
+            );
+        }
+        
+        if($this->container->has('template')) {
+            $template = $this->container->get('template');
+            if(file_exists($this->paths['base'] . 'template.php')) {
+                include_once($this->paths['base'].'template.php');
+            }
+        }
     }
 
 
