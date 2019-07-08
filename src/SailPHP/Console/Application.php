@@ -23,13 +23,21 @@ class Application extends Console
 
         $this->beep($root, $providers);
 
-        $this->config = ['commands' => [
-            
-        ]];
+        $this->config = [
+            'commands'  => [
+                \SailPHP\Model\Command\Create::class,
+                \SailPHP\Controller\Command\Create::class
+            ],
+        ];
+
+        foreach($this->config['commands'] as $command) {
+            $instance = new $command;
+            $this->add($instance);
+        }
     }
 
     private function beep($root, array $providers)
     {
-        $this->app = new App($root, $providers);
+        $this->app = new App($root, $providers, true);
     }
 }
