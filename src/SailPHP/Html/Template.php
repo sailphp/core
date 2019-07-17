@@ -63,6 +63,13 @@ class Template
             });
             $this->twig->addFunction($function);
         }
+
+        // Pagination Links
+        $function = new \Twig\TwigFunction('links', function($var) {
+            return links($var);
+        });
+        $this->twig->addFunction($function);
+
         $template = $this;
         if(file_exists($this->app->getPaths()['app'] . '/template.php')) {
             require_once($this->app->getPaths()['app'].'/template.php');

@@ -120,3 +120,15 @@ function asset_path()
 {
     return public_path().'assets/';
 }
+
+function links($paginate) {
+    $presenter = new SailPHP\Database\Presenter($paginate);
+    echo $presenter->links();
+    return;
+}
+
+function setCurrentPage($page) {
+    Illuminate\Pagination\Paginator::currentPageResolver(function() use ($page) {
+        return $page;
+    });
+}
