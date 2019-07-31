@@ -127,7 +127,15 @@ function links($paginate) {
     return;
 }
 
-function setCurrentPage($page) {
+function setCurrentPage($page = null) {
+    if (is_null($page)){
+        if (input('page') !== null && input('page') !== ''){
+            $page = input('page');
+        } else {
+            $page = 1;
+        }
+    }
+    
     Illuminate\Pagination\Paginator::currentPageResolver(function() use ($page) {
         return $page;
     });
