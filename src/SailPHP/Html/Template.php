@@ -19,12 +19,15 @@ class Template
     private $twig = null;
 
     private $app = null;
-    public function __construct(App $app)
+
+    private $extension = 'html';
+
+    public function __construct(App $app, $extension = 'html')
     {
         $this->app = $app;
         $this->loader = new \Twig\Loader\FilesystemLoader(paths('base').'/templates');
         $this->twig = new \Twig\Environment($this->loader);
-
+        $this->extension = $extension;
         $this->addFunctions();
         
     }
@@ -89,7 +92,7 @@ class Template
     
     public function render($file, $parameters = array())
     {
-        echo $this->twig->render($file.".html", $parameters);
+        echo $this->twig->render($file.".".$this->extension, $parameters);
         
         return;
     }
