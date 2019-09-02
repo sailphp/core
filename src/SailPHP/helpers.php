@@ -52,6 +52,11 @@ function view($name, $parameters = array())
     return container('template')->render($name, $parameters);
 }
 
+function viewReturn($name, $parameters = array())
+{
+    return container('template')->renderReturn($name, $parameters);
+}
+
 function paths($key = false)
 {
     $paths = app()->getPaths();

@@ -96,4 +96,9 @@ class Template
         
         return;
     }
+
+    public function renderReturn($file, $parameters = array())
+    {
+        return $this->twig->render($file.".".$this->extension, $parameters);;
+    }
 }
