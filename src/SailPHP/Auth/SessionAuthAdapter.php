@@ -16,6 +16,9 @@ class SessionAuthAdapter implements AuthAdapter
     public function setConfig(array $config)
     {
         $this->config = $config;
+        if(array_key_exists('user_pk', $this->config)) {
+            $this->field = $this->config['user_pk'];
+        }
     }
 
     public function setSession(Session $session)
@@ -23,9 +26,8 @@ class SessionAuthAdapter implements AuthAdapter
         $this->session = $session;
     }
 
-    public function login(Authable $authable, $field = 'id')
+    public function login(Authable $authable)
     {
-        $this->field = $field;
         if($this->loggedIn()) {
             return $this->getUser();
         }
