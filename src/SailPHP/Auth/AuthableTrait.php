@@ -6,10 +6,10 @@ namespace SailPHP\Auth;
 
 trait AuthableTrait
 {
-    public function serialize()
+    public function serialize($field = 'id')
     {
         return (object)[
-            'id'    => $this->id
+            'id'    => $this->{$field}
         ];
     }
 }

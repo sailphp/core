@@ -11,6 +11,7 @@ class SessionAuthAdapter implements AuthAdapter
 {
     protected $config = [];
     protected $session;
+    protected $field = 'id';
 
     public function setConfig(array $config)
     {
@@ -22,13 +23,14 @@ class SessionAuthAdapter implements AuthAdapter
         $this->session = $session;
     }
 
-    public function login(Authable $authable)
+    public function login(Authable $authable, $field = 'id')
     {
+        $this->field = $field;
         if($this->loggedIn()) {
             return $this->getUser();
         }
 
-        $data = $this->session->serialize($authable->serialize());
+        $data = $this->session->serialize($authable->serialize($this->field));
 
         $this->session->put($this->config['session_key'], $data);
 
@@ -51,7 +53,8 @@ class SessionAuthAdapter implements AuthAdapter
 
     private function getUser()
     {
-        $data = $this->session->get($this->config['session_key']);
+        
+       $data = $this->session->get($this->config['session_key']);
 
         try {
             $unserialised = $this->session->unserialize($data);
@@ -61,12 +64,12 @@ class SessionAuthAdapter implements AuthAdapter
             }
 
             $model = $this->config['auth_model'];
-
+            
 
             if(method_exists($model, 'byId')) {
                 $user = $model::byId($unserialised->id);
             } else {
-                $user = $model::where('id', $unserialised->id)->first();
+                $user = $model::where($this->field, $unserialised->id)->first();
             }
 
             if(!($user instanceof Authable)) {

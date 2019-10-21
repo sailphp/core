@@ -6,5 +6,5 @@ namespace SailPHP\Auth;
 
 interface Authable
 {
-    public function serialize();
+    public function serialize($field);
 }
