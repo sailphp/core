@@ -39,7 +39,6 @@ class App
             $this->getEnv()
         );
 
-        $this->database();
         // If Session is injected into container, lets call session start
         if($this->container->has('session')) {
             $this->container->get('session')->start();
@@ -86,6 +85,14 @@ class App
         die();
     }
 
+    public function addConnection($name) {
+        if($this->container->has('database')) {
+            $database = $this->container->get('database');
+            $database->addConnection($this->container->get('config')->get('database.'.$name), $name);
+            $this->database = $database;
+        }
+    }
+
     private function setupInitialPaths(array $paths)
     {
         if (! isset($paths['base'], $paths['app'], $paths['public'], $paths['storage'])) {
@@ -100,6 +107,8 @@ class App
 
     public function listen()
     {
+        
+        $this->database();
         $this->loadMiddlewares();
         $this->loadRouteFiles();
 
