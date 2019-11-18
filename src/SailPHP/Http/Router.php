@@ -44,6 +44,7 @@ class Router extends RouteCollection
     ];
 
     protected $path = null;
+    protected $name = null;
 
     protected $groupStack = array();
 
@@ -102,6 +103,7 @@ class Router extends RouteCollection
         $path = $this->prefix($path);
 
         $routeName = $options['name'];
+        $this->name = $routeName;
         $options = ['controller' => $options['controller']];
         $route = new Route($path, $options, [], [], '', [], [strtoupper($method)]);
         $this->add($routeName, $route);
@@ -156,38 +158,44 @@ class Router extends RouteCollection
         $context = $this->context();
         $path = $request->getPathInfo();
         $matcher = new UrlMatcher($this, $context);
-
-
-        $this->matchMiddleware($path);
+        $middleware = $matcher->match($path);
+        $this->matchMiddleware($middleware);
 
         try {
-            return $matcher->match($path);
+            return $middleware;
         } catch (ResourceNotFoundException $e) {
             return false;
         }
     }
 
-    private function matchMiddleware($path)
+    private function matchMiddleware($middleware)
     {
-        if(!array_key_exists($path, $this->middlewares)) {
+        if(empty($middleware)) {
             return;
         }
+        $name = $middleware['_route'];
 
-    
-
-        $middlewares = $this->middlewares[$path];
-        return $this->sortMiddleware($middlewares);
+        if(!\array_key_exists($name, $this->middlewares)) {
+            return;
+        }
+        
+        $match = $this->middlewares[$name];
+        if(empty($match) || is_null($match)) {
+            return;
+        }
+        
+        return $this->sortMiddleware($match);
     }
 
-    private function sortMiddleware($middlewares = array())
+    private function sortMiddleware($middleware)
     {
         $appMiddlewares = container('app')->middlewares();
         
-        if(empty($middlewares) || empty($appMiddlewares)) {
+        if(empty($middleware) || empty($appMiddlewares)) {
             return;
         }
-        $name = $middlewares['name'];
-        $params = $middlewares['params'];
+        $name = $middleware['name'];
+        $params = $middleware['params'];
         if(array_key_exists($name, $appMiddlewares)) {
             $mapped = $appMiddlewares[$name];
             if(!is_null($mapped)) {
@@ -243,11 +251,11 @@ class Router extends RouteCollection
     // }
 
     public function middleware($middleware, $params = array()) {
-        if(!array_key_exists($this->path, $this->middlewares)) {
-           $this->middlewares[$this->path] = array('name'  => $middleware, 'params'    => $params);
+        if(!array_key_exists($this->name, $this->middlewares)) {
+           $this->middlewares[$this->name] = array('name'  => $middleware, 'params'    => $params);
         }
 
-        $data = $this->middlewares[$this->path];
+        $data = $this->middlewares[$this->name];
         
         array_push($data, $middleware);
 
