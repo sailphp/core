@@ -105,6 +105,11 @@ class App
         $this->paths['env_file'] = $this->paths['base'].'/.env';
     }
 
+    public function cli()
+    {
+        $this->database();
+    }
+
     public function listen()
     {
         
