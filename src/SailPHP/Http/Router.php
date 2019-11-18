@@ -173,6 +173,8 @@ class Router extends RouteCollection
             return;
         }
 
+    
+
         $middlewares = $this->middlewares[$path];
         return $this->sortMiddleware($middlewares);
     }
@@ -180,26 +182,24 @@ class Router extends RouteCollection
     private function sortMiddleware($middlewares = array())
     {
         $appMiddlewares = container('app')->middlewares();
+        
         if(empty($middlewares) || empty($appMiddlewares)) {
             return;
         }
-        
-        
-        foreach($middlewares as $middleware) {
-                
-            if(array_key_exists($middleware, $appMiddlewares)) {
-                $mapped = $appMiddlewares[$middleware];
-                if(!is_null($mapped)) {
-                    $this->runMiddleware($mapped, array());
-                }
-            } else {
-                $this->runMiddleware($middleware, array());
+        $name = $middlewares['name'];
+        $params = $middlewares['params'];
+        if(array_key_exists($name, $appMiddlewares)) {
+            $mapped = $appMiddlewares[$name];
+            if(!is_null($mapped)) {
+                return $this->runMiddleware($mapped, $params);
             }
-        }
+        } 
+
+        $this->runMiddleware($name, $params);
     }
 
     private function runMiddleware($class, $params)
-    {
+    {   
         $class = new $class;
         return call_user_func_array(array($class, 'handle'), $params);
     }
@@ -236,12 +236,21 @@ class Router extends RouteCollection
         return '/';
     }
 
+    // public function middleware($middleware, $params = array()) {
+    //     echo $middleware;
+    //     $this->middlewares[$this->path] = array('name'  => $middleware, 'params'    => $params);
+    //     return $this;
+    // }
+
     public function middleware($middleware, $params = array()) {
         if(!array_key_exists($this->path, $this->middlewares)) {
-            $this->middlewares[$this->path] = array();
+           $this->middlewares[$this->path] = array('name'  => $middleware, 'params'    => $params);
         }
+
+        $data = $this->middlewares[$this->path];
         
-        array_push($this->middlewares[$this->path], $middleware);
+        array_push($data, $middleware);
+
         return $this;
     }
 }
