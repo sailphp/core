@@ -144,27 +144,27 @@ class Router extends RouteCollection
             ]);
         }
     }
-    
+
     /**
      * Matches the routes setup by the user against
      * the current request.
      *
-     * @return array
+     * @return array|null
      */
     public function match(SymfonyRequest $request)
     {
         $context = $this->context();
         $path = $request->getPathInfo();
         $matcher = new UrlMatcher($this, $context);
-
-
-        $this->matchMiddleware($path);
-
         try {
-            return $matcher->match($path);
-        } catch (ResourceNotFoundException $e) {
-            return false;
+            $middleware = $matcher->match($path);
+        } catch(ResourceNotFoundException $e) {
+            return null;
         }
+
+        $this->matchMiddleware($middleware);
+
+        return $middleware;
     }
 
     private function matchMiddleware($path)
@@ -183,10 +183,10 @@ class Router extends RouteCollection
         if(empty($middlewares) || empty($appMiddlewares)) {
             return;
         }
-        
-        
+
+
         foreach($middlewares as $middleware) {
-                
+
             if(array_key_exists($middleware, $appMiddlewares)) {
                 $mapped = $appMiddlewares[$middleware];
                 if(!is_null($mapped)) {
@@ -240,7 +240,7 @@ class Router extends RouteCollection
         if(!array_key_exists($this->path, $this->middlewares)) {
             $this->middlewares[$this->path] = array();
         }
-        
+
         array_push($this->middlewares[$this->path], $middleware);
         return $this;
     }
