@@ -43,7 +43,7 @@ class App
         if($this->container->has('session')) {
             $this->container->get('session')->start();
         }
-        
+
         if($this->container->has('cookie')) {
             $this->container->get('cookie')->setResponse(
                 $this->container->get('response')
@@ -81,7 +81,7 @@ class App
             header("HTTP/1.0 404 Not Found");
             echo '<h1>404 Not Found</h1>';
         }
-        
+
         die();
     }
 
@@ -112,8 +112,7 @@ class App
 
     public function listen()
     {
-        
-        $this->database();
+
         $this->loadMiddlewares();
         $this->loadRouteFiles();
 
@@ -162,7 +161,7 @@ class App
         return env('ENVIRONMENT') ?: 'production';
     }
 
-    private function database()
+    public function database()
     {
         if($this->container->has('database')) {
             $database = $this->container->get('database');
