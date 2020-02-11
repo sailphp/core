@@ -71,9 +71,13 @@ function validate()
     return Validator::class;
 }
 
-function redirect($url)
+function redirect($url, $status = 200)
 {
-    header("Location: ".$url);
+    if($status != 200) {
+        header("Location: ".$url, true, $status);
+    } else {
+        header("Location: ".$url);
+    }
     return;
 }
 
@@ -140,7 +144,7 @@ function setCurrentPage($page = null) {
             $page = 1;
         }
     }
-    
+
     Illuminate\Pagination\Paginator::currentPageResolver(function() use ($page) {
         return $page;
     });
