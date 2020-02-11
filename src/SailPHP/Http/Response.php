@@ -41,8 +41,8 @@ class Response extends SymfonyResponse
         return $this->send();
     }
 
-    public function redirect($url)
+    public function redirect($url, $status = 302, $headers = [])
     {
-        return new RedirectResponse($url);
+        return new RedirectResponse($url, $status, $headers);
     }
 }
