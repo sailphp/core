@@ -61,13 +61,24 @@ class Route
         return call_user_func_array([$controller, $method], $params);
     }
 
+    public static function any($path, $name, $controller)
+    {
+        $options = [
+            'name'  => $name,
+            'controller'    => $controller
+        ];
+
+        $route = route()->route('*', $path, $options);
+        return $route;
+    }
+
     public static function get($path, $name, $controller)
     {
         $options = [
             'name'  => $name,
             'controller'    => $controller
         ];
-        
+
         $route = route()->route('GET', $path, $options);
         return $route;
     }

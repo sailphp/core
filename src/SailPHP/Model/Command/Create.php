@@ -7,14 +7,32 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class Create
+ * @package SailPHP\Model\Command
+ */
 class Create extends Command
 {
+    /**
+     * @var string
+     */
     protected $name = 'model:create';
 
+    /**
+     * @var string
+     */
     protected $description = "Create a new model file.";
 
+    /**
+     * @var string
+     */
     protected $help = "This will create a new model class.";
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|void|null
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $this->formatClassname($input->getArgument('name'));
@@ -29,8 +47,12 @@ class Create extends Command
         $output->writeln(["", ""]);
     }
 
+    /**
+     * @param $name
+     * @return bool
+     */
     protected function putModel($name)
-    {   
+    {
         $file = "<?php \n
 namespace App\Models;
         
@@ -53,6 +75,9 @@ class ".$name." extends Model
 
     }
 
+    /**
+     *
+     */
     protected  function configure()
     {
         parent::configure();
@@ -60,6 +85,10 @@ class ".$name." extends Model
         $this->addArgument('name', InputArgument::REQUIRED, 'The name for the model.');
     }
 
+    /**
+     * @param $name
+     * @return string
+     */
     private function formatClassname($name)
     {
         return ucfirst($name);

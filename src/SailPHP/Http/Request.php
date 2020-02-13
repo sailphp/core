@@ -29,11 +29,18 @@ class Request extends SymfonyRequest
         );
     }
 
+    /**
+     * @return RequestInterface
+     */
     public function asPsr() : RequestInterface
     {
         return static::toPsr($this);
     }
 
+    /**
+     * @param SymfonyRequest $request
+     * @return RequestInterface
+     */
     public static function toPsr(SymfonyRequest $request) : RequestInterface
     {
         $psrFactory = new DiactorosFactory();

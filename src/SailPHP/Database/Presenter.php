@@ -6,18 +6,35 @@
 namespace SailPHP\Database;
 use Illuminate\Support\HtmlString;
 
+/**
+ * Class Presenter
+ * @package SailPHP\Database
+ */
 class Presenter
 {
 
+    /**
+     * @var null
+     */
     private $paginator = null;
+    /**
+     * @var array|null
+     */
     private $window = null;
 
+    /**
+     * Presenter constructor.
+     * @param $paginator
+     */
     public function __construct($paginator)
     {
         $this->paginator = $paginator;
         $this->window = $this->get();
     }
 
+    /**
+     * @return array
+     */
     protected function getSmallSlider()
     {
         return [
@@ -27,6 +44,9 @@ class Presenter
         ];
     }
 
+    /**
+     * @return HtmlString|string
+     */
     public function links()
     {
         if ($this->paginator->hasPages()) {
@@ -41,36 +61,63 @@ class Presenter
         return '';
     }
 
+    /**
+     * @param $url
+     * @param $page
+     * @param null $rel
+     * @return string
+     */
     protected function getAvailablePageWrapper($url, $page, $rel = null)
     {
         $rel = is_null($rel) ? '' : ' rel="'.$rel.'"';
         return '<li class="page-item"><a class="page-link" href="'.htmlentities($url).'"'.$rel.'>'.$page.'</a></li>';
     }
 
+    /**
+     * @return string
+     */
     protected function getDots()
     {
         return $this->getDisabledTextWrapper('...');
     }
 
+    /**
+     * @return mixed
+     */
     protected function currentPage()
     {
         return $this->paginator->currentPage();
     }
 
+    /**
+     * @return mixed
+     */
     protected function lastPage() {
         return $this->paginator->lastPage();
     }
 
+    /**
+     * @param $text
+     * @return string
+     */
     protected function getActivePageWrapper($text)
     {
         return '<li class="active page-item"><a class="page-link">'.$text.'</a></li>';
     }
 
+    /**
+     * @param $text
+     * @return string
+     */
     protected function getDisabledTextWrapper($text)
     {
         return '<li class="disabled page-item"><a class="page-link" aria-disabled="diabled">'.$text.'</a></li>';
     }
 
+    /**
+     * @param string $text
+     * @return string
+     */
     public function getPreviousButton($text = '&laquo;')
     {
         // If the current page is less than or equal to one, it means we can't go any
@@ -85,6 +132,10 @@ class Presenter
         return $this->getPageLinkWrapper($url, $text, 'prev');
     }
 
+    /**
+     * @param string $text
+     * @return string
+     */
     public function getNextButton($text = '&raquo;')
     {
         // If the current page is greater than or equal to the last page, it means we
@@ -97,6 +148,10 @@ class Presenter
         return $this->getPageLinkWrapper($url, $text, 'next');
     }
 
+    /**
+     * @param int $onEachSide
+     * @return array
+     */
     public function get($onEachSide = 3)
     {
         if ($this->paginator->lastPage() < ($onEachSide * 2) + 6) {
@@ -105,6 +160,10 @@ class Presenter
         return $this->getUrlSlider($onEachSide);
     }
 
+    /**
+     * @param $onEachSide
+     * @return array
+     */
     protected function getUrlSlider($onEachSide)
     {
         $window = $onEachSide * 2;
@@ -125,6 +184,10 @@ class Presenter
         return $this->getFullSlider($onEachSide);
     }
 
+    /**
+     * @param $onEachSide
+     * @return array
+     */
     protected function getFullSlider($onEachSide)
     {
         return [
@@ -134,6 +197,10 @@ class Presenter
         ];
     }
 
+    /**
+     * @param $onEachSide
+     * @return mixed
+     */
     public function getAdjacentUrlRange($onEachSide)
     {
         return $this->paginator->getUrlRange(
@@ -142,11 +209,18 @@ class Presenter
         );
     }
 
+    /**
+     * @return bool
+     */
     public function hasPages()
     {
         return $this->paginator->lastPage() > 1;
     }
 
+    /**
+     * @param $window
+     * @return array
+     */
     protected function getSliderTooCloseToBeginning($window)
     {
         return [
@@ -156,6 +230,10 @@ class Presenter
         ];
     }
 
+    /**
+     * @param $window
+     * @return array
+     */
     protected function getSliderTooCloseToEnding($window)
     {
         $last = $this->paginator->getUrlRange(
@@ -169,11 +247,17 @@ class Presenter
         ];
     }
 
+    /**
+     * @return mixed
+     */
     public function getStart()
     {
         return $this->paginator->getUrlRange(1, 2);
     }
 
+    /**
+     * @return mixed
+     */
     public function getFinish()
     {
         return $this->paginator->getUrlRange(
@@ -182,6 +266,9 @@ class Presenter
         );
     }
 
+    /**
+     * @return string
+     */
     protected function getLinks()
     {
         $html = '';
@@ -199,6 +286,12 @@ class Presenter
         return $html;
     }
 
+    /**
+     * @param $url
+     * @param $page
+     * @param null $rel
+     * @return string
+     */
     protected function getPageLinkWrapper($url, $page, $rel = null)
     {
         if ($page == $this->paginator->currentPage()) {
@@ -207,6 +300,10 @@ class Presenter
         return $this->getAvailablePageWrapper($url, $page, $rel);
     }
 
+    /**
+     * @param array $urls
+     * @return string
+     */
     protected function getUrlLinks(array $urls)
     {
         $html = '';

@@ -25,7 +25,8 @@
     "symfony/security": "^4.2",
     "twig/twig": "^2.7",
     "vlucas/phpdotenv": "^3.3",
-    "zendframework/zend-diactoros": "^2.1"
+    "zendframework/zend-diactoros": "^2.1",
+    "ext-json": "*"
   },
   "require-dev": {
     "symfony/var-dumper": "^4.2"

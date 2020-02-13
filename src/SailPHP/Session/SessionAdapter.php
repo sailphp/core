@@ -11,10 +11,21 @@ namespace SailPHP\Session;
 
 use http\Exception\RuntimeException;
 
+/**
+ * Class SessionAdapter
+ * @package SailPHP\Session
+ */
 class SessionAdapter
 {
+    /**
+     * @var
+     */
     protected $id;
 
+    /**
+     * @param $key
+     * @return $this
+     */
     public function delete($key)
     {
         $this->checkHasStarted();
@@ -23,18 +34,31 @@ class SessionAdapter
         return $this;
     }
 
+    /**
+     * @param $key
+     * @param $value
+     * @return mixed
+     */
     public function put($key, $value)
     {
         $this->checkHasStarted();
         return $_SESSION[$key] = $value;
     }
 
+    /**
+     * @param $key
+     * @return bool
+     */
     public function has($key)
     {
         $this->checkHasStarted();
         return isset($_SESSION[$key]);
     }
 
+    /**
+     * @param $key
+     * @return mixed
+     */
     public function get($key)
     {
         $this->checkHasStarted();
@@ -48,6 +72,11 @@ class SessionAdapter
         return $value;
     }
 
+    /**
+     * @param $key
+     * @param $value
+     * @return mixed
+     */
     public function quick($key, $value)
     {
         $this->checkHasStarted();
@@ -57,6 +86,9 @@ class SessionAdapter
         return $value;
     }
 
+    /**
+     *
+     */
     public function start()
     {
         session_start();
@@ -64,11 +96,17 @@ class SessionAdapter
         $this->id = session_id();
     }
 
+    /**
+     *
+     */
     public function refresh()
     {
         session_regenerate_id();
     }
 
+    /**
+     *
+     */
     private function checkHasStarted()
     {
         $status = session_status();

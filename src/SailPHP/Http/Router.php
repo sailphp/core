@@ -43,6 +43,8 @@ class Router extends RouteCollection
         'delete' => ['DELETE', '/{id}'],
     ];
 
+    private $allowedMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
+
     protected $path = null;
     protected $name = null;
 
@@ -95,17 +97,29 @@ class Router extends RouteCollection
      */
     public function route($method, $path, array $options)
     {
-        if (!in_array($method, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'])) {
-            throw new UnsupportedMethodException($method);
+        $method = strtoupper($method);
+
+        if($method != '*') {
+            if (!in_array($method, $this->allowedMethods)) {
+                throw new UnsupportedMethodException($method);
+            }
         }
+
         $path = str_replace(':int', '<\d+>', $path);
         $path = str_replace(':slug', '<[a-zA-Z0-9-_]+>', $path);
         $path = $this->prefix($path);
 
+        $methodArr = [];
+        if($method != '*') {
+            $methodArr = [$method];
+        } else {
+            $methodArr = $this->allowedMethods;
+        }
+
         $routeName = $options['name'];
         $this->name = $routeName;
         $options = ['controller' => $options['controller']];
-        $route = new Route($path, $options, [], [], '', [], [strtoupper($method)]);
+        $route = new Route($path, $options, [], [], '', [], $methodArr);
         $this->add($routeName, $route);
         $this->path = $path;
         return $this;
@@ -158,6 +172,7 @@ class Router extends RouteCollection
         $context = $this->context();
         $path = $request->getPathInfo();
         $matcher = new UrlMatcher($this, $context);
+//        dd($this);
         try {
             $middleware = $matcher->match($path);
         } catch(ResourceNotFoundException $e) {
@@ -245,15 +260,9 @@ class Router extends RouteCollection
         return '/';
     }
 
-    // public function middleware($middleware, $params = array()) {
-    //     echo $middleware;
-    //     $this->middlewares[$this->path] = array('name'  => $middleware, 'params'    => $params);
-    //     return $this;
-    // }
-
     public function middleware($middleware, $params = array()) {
         if(!array_key_exists($this->name, $this->middlewares)) {
-           $this->middlewares[$this->name] = array('name'  => $middleware, 'params'    => $params);
+            $this->middlewares[$this->name] = array('name'  => $middleware, 'params'    => $params);
         }
 
         $data = $this->middlewares[$this->name];

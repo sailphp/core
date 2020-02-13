@@ -10,11 +10,25 @@ namespace SailPHP\Http;
 
 use Respect\Validation\Validator as Resepect;
 use Respect\Validation\Exceptions\NestedValidationException;
+
+/**
+ * Class Validator
+ * @package SailPHP\Http
+ */
 class Validator
 {
 
+    /**
+     * @var array
+     */
     protected $errors = [];
 
+    /**
+     * @param Request $request
+     * @param array $rules
+     * @param bool $session
+     * @return $this
+     */
     public function validate(Request $request, array $rules, $session = true)
     {
         foreach($rules as $field => $rule)
@@ -33,11 +47,17 @@ class Validator
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function errors()
     {
         return $this->errors;
     }
 
+    /**
+     * @return bool
+     */
     public function failed()
     {
         return !empty($this->errors);
