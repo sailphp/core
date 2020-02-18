@@ -2,6 +2,7 @@
 
 namespace SailPHP\Auth;
 
+use SailPHP\Auth\Adapters\AuthAdapter;
 use SailPHP\Session\SessionAdapter;
 use SailPHP\Session\Session;
 use SailPHP\Traits\AdapterPattern;

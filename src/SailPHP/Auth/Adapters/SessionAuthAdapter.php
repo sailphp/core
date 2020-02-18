@@ -1,7 +1,7 @@
 <?php
 
 
-namespace SailPHP\Auth;
+namespace SailPHP\Auth\Adapters;
 
 
 use SailPHP\Exception\NoAuthableLoggedInException;
@@ -55,7 +55,7 @@ class SessionAuthAdapter implements AuthAdapter
 
     private function getUser()
     {
-        
+
        $data = $this->session->get($this->config['session_key']);
 
         try {
@@ -66,7 +66,7 @@ class SessionAuthAdapter implements AuthAdapter
             }
 
             $model = $this->config['auth_model'];
-            
+
 
             if(method_exists($model, 'byId')) {
                 $user = $model::byId($unserialised->id);
@@ -85,6 +85,13 @@ class SessionAuthAdapter implements AuthAdapter
         return $user;
     }
 
+    public function refresh()
+    {
+        $this->session->refresh();
+
+        return $this->user();
+    }
+
     public function logout()
     {
         if(!$this->loggedIn()) {
@@ -92,7 +99,7 @@ class SessionAuthAdapter implements AuthAdapter
         }
 
         $this->session->delete($this->config['session_key']);
-
+        $this->session->refresh();
         return true;
     }
 }
