@@ -76,7 +76,9 @@ class App
     {
         header("HTTP/1.0 404 Not Found");
         try {
-            echo view('errors/404', array());
+            echo view('errors/404', array(
+
+            ));
         } catch(\Throwable $e) {
             header("HTTP/1.0 404 Not Found");
             echo '<h1>404 Not Found</h1>';
@@ -114,7 +116,11 @@ class App
     {
 
         $this->loadMiddlewares();
-        $this->loadRouteFiles();
+        if($this->routesAreCached()) {
+            $this->loadCachedRoutes();
+        } else {
+            $this->loadRouteFiles();
+        }
 
         $match = $this->container->get('router')->match($this->container->get('request'));
         $route = new Route($match);
@@ -169,5 +175,28 @@ class App
             $database->setAsGlobal();
             $database->bootEloquent();
         }
+    }
+
+    public function routesAreCached()
+    {
+        return $this->cacheFileExists('routes.php');
+    }
+
+    private function cacheFileExists($file)
+    {
+        if(!in_array('cache', $this->paths)) {
+            return false;
+        }
+
+        if(file_exists($this->paths['cache'] . '/' . $file)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function loadCachedRoutes()
+    {
+
     }
 }

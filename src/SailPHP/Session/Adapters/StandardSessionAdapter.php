@@ -6,16 +6,16 @@
  * Time: 3:36 PM
  */
 
-namespace SailPHP\Session;
+namespace SailPHP\Session\Adapters;
 
 
 use http\Exception\RuntimeException;
 
 /**
  * Class SessionAdapter
- * @package SailPHP\Session
+ * @package SailPHP\Session\Adapters
  */
-class SessionAdapter
+class StandardSessionAdapter implements SessionAdapter
 {
     /**
      * @var
