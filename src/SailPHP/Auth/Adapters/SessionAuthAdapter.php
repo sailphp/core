@@ -6,6 +6,7 @@ namespace SailPHP\Auth\Adapters;
 
 use SailPHP\Exception\NoAuthableLoggedInException;
 use SailPHP\Session\Session;
+use SailPHP\Auth\Authable;
 
 class SessionAuthAdapter implements AuthAdapter
 {
