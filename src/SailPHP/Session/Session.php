@@ -9,7 +9,7 @@
 namespace SailPHP\Session;
 
 use SailPHP\Traits\AdapterPattern;
-
+use SailPHP\Session\Adapters\SessionAdapter;
 /**
  * Class Session
  * @package SailPHP\Session
