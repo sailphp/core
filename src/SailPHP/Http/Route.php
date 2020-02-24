@@ -45,7 +45,7 @@ class Route
         }
     }
 
-    public function match()
+    public function __destruct()
     {
         $controller = $this->controller;
         $method = $this->method;
@@ -59,6 +59,22 @@ class Route
 
         $params = $this->match;
         return call_user_func_array([$controller, $method], $params);
+    }
+
+    public function match()
+    {
+        // $controller = $this->controller;
+        // $method = $this->method;
+
+        // $controller = new $controller();
+        // if(!method_exists($controller, $method)) {
+        //     throw new \RuntimeException("Method not found.");
+        // }
+
+        // unset($this->match['controller'], $this->match['_route']);
+
+        // $params = $this->match;
+        // return call_user_func_array([$controller, $method], $params);
     }
 
     public static function any($path, $name, $controller)

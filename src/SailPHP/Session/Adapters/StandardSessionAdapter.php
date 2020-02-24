@@ -57,11 +57,15 @@ class StandardSessionAdapter implements SessionAdapter
 
     /**
      * @param $key
-     * @return mixed
+     * @return mixed|null
      */
     public function get($key)
     {
         $this->checkHasStarted();
+
+        if(!$this->has($key)) {
+            return null;
+        }
         $value = $_SESSION[$key];
 
         // Check for quick
