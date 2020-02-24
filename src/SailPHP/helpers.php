@@ -36,7 +36,7 @@ function app()
  */
 function response()
 {
-    return container('response');
+    return container('_response');
 }
 
 /**
