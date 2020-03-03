@@ -50,6 +50,10 @@ class Route
         $controller = $this->controller;
         $method = $this->method;
 
+        if(!class_exists($controller)) {
+            return;
+        }
+
         $controller = new $controller();
         if(!method_exists($controller, $method)) {
             throw new \RuntimeException("Method not found.");
