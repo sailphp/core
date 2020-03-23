@@ -152,7 +152,7 @@ function input($name, $clean = true)
 
 function clean($key)
 {
-    return trim(addslashes(htmlentities($key)));
+    return trim(addslashes(htmlspecialchars($key, ENT_QUOTES, 'UTF-8', false)));
 }
 
 /**
