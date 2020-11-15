@@ -12,4 +12,5 @@ interface SessionAdapter
     public function id();
     public function start();
     public function refresh();
+    public function destroy();
 }

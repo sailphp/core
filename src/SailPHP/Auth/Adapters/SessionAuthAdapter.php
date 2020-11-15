@@ -93,6 +93,11 @@ class SessionAuthAdapter implements AuthAdapter
         return $this->user();
     }
 
+    public function destroy()
+    {
+        $this->session->destroy();
+    }
+
     public function logout()
     {
         if(!$this->loggedIn()) {

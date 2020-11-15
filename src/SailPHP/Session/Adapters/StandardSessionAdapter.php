@@ -111,6 +111,11 @@ class StandardSessionAdapter implements SessionAdapter
         session_regenerate_id();
     }
 
+    public function destroy()
+    {
+        session_destroy();
+    }
+
     /**
      *
      */
