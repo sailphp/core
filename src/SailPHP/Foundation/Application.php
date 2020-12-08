@@ -2,8 +2,6 @@
 
 
 namespace SailPHP\Foundation;
-
-
 use Illuminate\Support\Arr;
 
 class Application extends \Illuminate\Container\Container

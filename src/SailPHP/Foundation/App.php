@@ -13,6 +13,7 @@ use InvalidArgumentException;
 use Symfony\Component\Finder\Finder;
 use SailPHP\Http\Route;
 use SailPHP\Html\Template;
+use Dotenv\Repository\RepositoryBuilder;
 class App
 {
     public $container;
@@ -159,8 +160,10 @@ class App
 
     public function getEnv()
     {
+        $repository = RepositoryBuilder::createWithDefaultAdapters()->make();
+
         if (!env('ENVIRONMENT') && is_file($this->paths['env_file'])) {
-            $dotenv = Dotenv::create($this->paths['base']);
+            $dotenv = Dotenv::create($repository, $this->paths['base']);
             $dotenv->load();
         }
 
