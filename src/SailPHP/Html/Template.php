@@ -29,7 +29,11 @@ class Template
         $this->twig = new \Twig\Environment($this->loader);
         $this->extension = $extension;
         $this->addFunctions();
-        
+    }
+
+    public function getExtension()
+    {
+        return $this->extension;
     }
 
     private function addFunctions()

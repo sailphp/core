@@ -122,11 +122,29 @@ class App
         } else {
             $this->loadRouteFiles();
         }
+        $router = $this->container->get('router');
+        $request = $this->container->get('request');
 
-        $match = $this->container->get('router')->match($this->container->get('request'));
-        $route = new Route($match);
+        try {
+            $match = $router->match($request);
+            $route = new Route($match);
 
-        $this->container->bind('response', $route->match());
+            $this->container->bind('response', $route->match());
+        } catch(\Symfony\Component\Routing\Exception\MethodNotAllowedException $e) {
+            
+            header($_SERVER["SERVER_PROTOCOL"]." 405 Method Not Allowed", true, 405);
+
+            $template = $this->container->get('template');
+            $extension = $template->getExtension();
+
+            $file = paths('base').'/templates/errors/404.' . $extension;
+            if(file_exists($file)) {
+                $this->container->get('template')->render('errors/404', []);
+                exit;
+            } 
+
+            die('404');
+        }
     }
 
     public function render()
