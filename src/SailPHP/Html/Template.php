@@ -26,10 +26,23 @@ class Template
     {
         $this->app = $app;
         $this->loader = new \Twig\Loader\FilesystemLoader(paths('base').'/templates');
-        $this->twig = new \Twig\Environment($this->loader);
+
+        $twigOptions = [];
+        if(config()->get('cache')) {
+            $cacheTemplates = config()->get('cache')['cache_template'];
+            if($cacheTemplates && config()->get('cache')['cache_template_directory']) {
+                $twigOptions['cache'] = paths('base').config()->get('cache')['cache_template_directory'];
+            }
+        }
+
+        $this->twig = new \Twig\Environment($this->loader, $twigOptions);
         $this->extension = $extension;
         $this->addFunctions();
-        
+    }
+
+    public function getExtension()
+    {
+        return $this->extension;
     }
 
     private function addFunctions()
