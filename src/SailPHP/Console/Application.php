@@ -26,7 +26,8 @@ class Application extends Console
         $this->config = [
             'commands'  => [
                 \SailPHP\Model\Command\Create::class,
-                \SailPHP\Controller\Command\Create::class
+                \SailPHP\Controller\Command\Create::class,
+                \SailPHP\Http\Command\RouteCacheCommand::class,
             ],
         ];
 

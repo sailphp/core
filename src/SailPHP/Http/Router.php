@@ -11,6 +11,7 @@ namespace SailPHP\Http;
 
 use SailPHP\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
@@ -101,7 +102,7 @@ class Router extends RouteCollection
 
         if($method != '*') {
             if (!in_array($method, $this->allowedMethods)) {
-                throw new UnsupportedMethodException($method);
+                throw new MethodNotAllowedException($this->allowedMethods, $method);
             }
         }
 

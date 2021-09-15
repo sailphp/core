@@ -1,9 +1,8 @@
 <?php
 
-namespace SailPHP\Model\Command;
+namespace SailPHP\Http\Command;
 
 use SailPHP\Console\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -28,6 +27,11 @@ class RouteCacheCommand extends Command
      */
     protected $help = "Create a route cache file for faster route registration.";
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
@@ -35,6 +39,13 @@ class RouteCacheCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $collection = $this->getApplication()->app->container->get('router');
 
+        $serializedCollection = serialize($collection);
+        
+        file_put_contents(paths('cache').'/routes.php', $serializedCollection);
+
+        $output->writeln('Routes cached.');
+        return 1;
     }
 }
