@@ -14,6 +14,8 @@ use Symfony\Component\Finder\Finder;
 use SailPHP\Http\Route;
 use SailPHP\Html\Template;
 use Dotenv\Repository\RepositoryBuilder;
+use SailPHP\Http\Csrf;
+
 class App
 {
     public $container;
@@ -30,7 +32,8 @@ class App
 
         $this->container = container();
         $this->container->set('app', $this);
-
+    
+        
         foreach($providers as $name => $provider) {
             $this->container->bind($name, $provider);
         }
@@ -45,11 +48,15 @@ class App
             $this->container->get('session')->start();
         }
 
-        if($this->container->has('cookie')) {
-            $this->container->get('cookie')->setResponse(
-                $this->container->get('response')
-            );
-        }
+        $this->container->set('csrf', new Csrf);
+
+        csrf()->generate();
+
+        // if($this->container->has('cookie')) {
+        //     $this->container->get('cookie')->setResponse(
+        //         $this->container->get('response')
+        //     );
+        // }
     }
 
     public function has($name)
@@ -115,7 +122,7 @@ class App
 
     public function listen()
     {
-
+        
         $this->loadMiddlewares();
         if($this->routesAreCached()) {
             $this->loadCachedRoutes();

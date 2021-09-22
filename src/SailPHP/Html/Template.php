@@ -80,6 +80,11 @@ class Template
             $this->twig->addFunction($function);
         }
 
+        $function = new \Twig\TwigFunction('csrf_token', function() {
+            return csrf()->getToken();
+        });
+        $this->twig->addFunction($function);
+
         // Pagination Links
         $function = new \Twig\TwigFunction('links', function($var) {
             return links($var);

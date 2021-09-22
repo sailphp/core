@@ -49,6 +49,11 @@ function request()
     return container('request');
 }
 
+function csrf() 
+{
+    return container('csrf');
+}
+
 /**
  * Return instance of Router.
  *

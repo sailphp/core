@@ -24,6 +24,7 @@
     "symfony/http-kernel": "^5.2.0",
     "symfony/psr-http-message-bridge": "~2.0.2",
     "symfony/routing": "^5.2",
+    "symfony/security-csrf": "^5.3",
     "twig/twig": "~2.7",
     "vlucas/phpdotenv": "~5.2.0",
     "zendframework/zend-diactoros": "~2.1"

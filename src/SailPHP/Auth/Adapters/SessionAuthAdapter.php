@@ -29,6 +29,7 @@ class SessionAuthAdapter implements AuthAdapter
 
     public function login(Authable $authable)
     {
+        
         if($this->loggedIn()) {
             return $this->getUser();
         }
@@ -89,7 +90,7 @@ class SessionAuthAdapter implements AuthAdapter
     public function refresh()
     {
         $this->session->refresh();
-
+        csrf()->newToken();
         return $this->user();
     }
 
@@ -100,10 +101,11 @@ class SessionAuthAdapter implements AuthAdapter
 
     public function logout()
     {
+
         if(!$this->loggedIn()) {
             return false;
         }
-
+        csrf()->newToken();
         $this->session->delete($this->config['session_key']);
         $this->session->refresh();
         return true;
