@@ -52,11 +52,12 @@ class Response extends SymfonyResponse
      * @param $data
      * @return Response
      */
-    public function json($data)
+    public function json($data, $code = 200)
     {
         $json = json_encode($data, JSON_PRETTY_PRINT);
         $this->headers->set('Content-Type', 'application/json');
         $this->setContent($json);
+        $this->setStatusCode($code);
         return $this->send();
     }
 

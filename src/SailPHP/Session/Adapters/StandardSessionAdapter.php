@@ -99,7 +99,7 @@ class StandardSessionAdapter implements SessionAdapter
      */
     public function start()
     {
-        //session_start();
+        session_start();
         $this->id = session_id();
     }
 
