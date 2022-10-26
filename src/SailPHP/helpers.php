@@ -157,6 +157,10 @@ function input($name, $clean = true)
 
 function clean($key)
 {
+    if(is_null($key)) {
+        return null;
+    }
+    
     return trim(addslashes(htmlspecialchars($key, ENT_QUOTES, 'UTF-8', false)));
 }
 
