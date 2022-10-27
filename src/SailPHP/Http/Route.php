@@ -27,7 +27,12 @@ class Route
     private $match = [];
 
     public function __construct($match)
-    {
+    {   
+        if(is_null($match)) {
+            app()->notFound();
+            die();
+        }
+        
         $this->match = $match;
 
         $parts = explode('@', $this->match['controller']);
