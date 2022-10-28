@@ -148,7 +148,10 @@ function redirect($url, $status = 200)
 function input($name, $clean = true)
 {
     $input = request()->get($name);
-    if($clean) {
+
+    if(empty($input)) {
+        return null;
+    } else if(is_string($input) && $clean) {
         $input = clean($input);
     }
 
@@ -160,8 +163,14 @@ function clean($key)
     if(is_null($key)) {
         return null;
     }
+
+    $key = strip_tags($key);
+    $key = trim($key);
+    if(empty($key)) {
+        return null;
+    }
     
-    return trim(addslashes(htmlspecialchars($key, ENT_QUOTES, 'UTF-8', false)));
+    return $key;
 }
 
 /**

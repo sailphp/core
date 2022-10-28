@@ -30,20 +30,45 @@ class Validator
      * @return $this
      */
     public function validate(Request $request, array $rules, $session = true)
-    {
+    {   
         foreach($rules as $field => $rule)
         {
-            try {
-                $rule->setName($field)->assert($request->get($field));
-            } catch(NestedValidationException $e)
-            {
-                $this->errors[$field] = $e->getMessages();
+            if(is_string($rule)) {
+                $rule = explode('|', $rule);
+            }
+            
+            if(is_array($rule)) {
+                $validator = Resepect::create();
+                // add rules
+                foreach($rule as $r) {
+                    try {
+                        $validator = $validator->{$r}();
+                    } catch(\Exception $e) {
+                        throw new \Exception("Invalid validation rule: {$r}");
+                    }
+                }
+
+                // validate
+                try {
+                    $validator->setName(ucfirst($field))->assert($request->get($field));
+                } catch(NestedValidationException $e) {
+                    $this->errors[$field] = $e->getMessages();
+                }
+            } else {
+
+                try {
+                    $rule->setName($field)->assert($request->get($field));
+                } catch(NestedValidationException $e)
+                {
+                    $this->errors[$field] = $e->getMessages();
+                }
             }
         }
 
         if($session) {
             session()->put('_errors', $this->errors);
         }
+        
         return $this;
     }
 

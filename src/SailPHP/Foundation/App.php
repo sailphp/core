@@ -129,9 +129,16 @@ class App
         } else {
             $this->loadRouteFiles();
         }
+
         $router = $this->container->get('router');
         $request = $this->container->get('request');
 
+        $contentType = $request->headers->get('Content-Type');
+        
+        if($contentType == 'application/json') {
+            $request->request->replace(json_decode($request->getContent(), true));
+        }
+        
         try {
             $match = $router->match($request);
             $route = new Route($match);

@@ -10,5 +10,17 @@ namespace SailPHP\Controller;
 
 abstract class Controller
 {
+    public function validate($request, $rules)
+    {
+        $validator = container('validator')->validate($request, $rules);
 
+        if ($validator->failed()) {
+            response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+            die();
+        }
+
+        return true;
+    }
 }
