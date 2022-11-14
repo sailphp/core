@@ -136,7 +136,7 @@ class App
         $contentType = $request->headers->get('Content-Type');
         
         if($contentType == 'application/json') {
-            $request->request->replace(json_decode($request->getContent()));
+            $request->request->replace(json_decode($request->getContent(), true));
         }
         
         try {
