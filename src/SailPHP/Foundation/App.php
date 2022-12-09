@@ -99,7 +99,7 @@ class App
         if($this->container->has('database')) {
             $database = $this->container->get('database');
             $database->addConnection($this->container->get('config')->get('database.'.$name), $name);
-            $this->database = $database;
+            // $this->database = $database;
         }
     }
 
