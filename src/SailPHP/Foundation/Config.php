@@ -13,6 +13,8 @@ use Symfony\Component\Finder\Finder;
 
 class Config extends Repository
 {
+    protected $configPath;
+    
     public function loadConfigurationFiles($path, $env = null)
     {
         $this->configPath = $path;

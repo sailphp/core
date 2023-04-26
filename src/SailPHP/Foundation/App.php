@@ -99,7 +99,7 @@ class App
         if($this->container->has('database')) {
             $database = $this->container->get('database');
             $database->addConnection($this->container->get('config')->get('database.'.$name), $name);
-            $this->database = $database;
+            // $this->database = $database;
         }
     }
 
@@ -136,7 +136,9 @@ class App
         $contentType = $request->headers->get('Content-Type');
         
         if($contentType == 'application/json') {
-            $request->request->replace(json_decode($request->getContent(), true));
+            if($request->getContent()) {
+                $request->request->replace(json_decode($request->getContent(), true));
+            }
         }
         
         try {
