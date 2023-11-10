@@ -8,12 +8,6 @@
 
 namespace SailPHP\Http;
 
-use \RuntimeException;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use SailPHP\Controller\Controller;
-use Relay\RelayBuilder;
-use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 class Route
 {
     private $controller;

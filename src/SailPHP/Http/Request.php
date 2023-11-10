@@ -46,4 +46,15 @@ class Request extends SymfonyRequest
         $psrFactory = new DiactorosFactory();
         return $psrFactory->createRequest($request);
     }
+
+    public function validate($rules) {
+        return new \Illuminate\Validation\Validator(
+            new \Illuminate\Translation\Translator(
+                new \Illuminate\Translation\ArrayLoader(),
+                'en'
+            ),
+            $this->request->all(),
+            $rules
+        );
+    }
 }
