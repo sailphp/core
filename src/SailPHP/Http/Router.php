@@ -8,7 +8,6 @@
 
 namespace SailPHP\Http;
 
-
 use SailPHP\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
@@ -173,7 +172,6 @@ class Router extends RouteCollection
         $context = $this->context();
         $path = $request->getPathInfo();
         $matcher = new UrlMatcher($this, $context);
-//        dd($this);
         try {
             $middleware = $matcher->match($path);
         } catch(ResourceNotFoundException $e) {
