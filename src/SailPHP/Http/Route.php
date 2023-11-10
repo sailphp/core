@@ -31,9 +31,9 @@ class Route
 
         $old = false;
         if (is_array($match['controller'])) {
-            $old = true;
             $parts = $match['controller'];  
         } else {
+            $old = true;
             $parts = explode('@', $this->match['controller']);
         }
         
