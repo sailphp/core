@@ -29,15 +29,23 @@ class Route
 
         $this->match = $match;
 
-        $parts = explode('@', $this->match['controller']);
-
+        $old = false;
+        if (is_array($match['controller'])) {
+            $old = true;
+            $parts = $match['controller'];  
+        } else {
+            $parts = explode('@', $this->match['controller']);
+        }
+        
         if(!is_array($parts) || count($parts) != 2) {
             app()->notFound();
             die();
         }
 
         list($this->controller, $this->method) = $parts;
-        $this->controller = "App\\Controllers\\".$this->controller;
+        if ($old) {
+            $this->controller = "App\\Controllers\\".$this->controller;
+        }
 
         if(!class_exists($this->controller)) {
             throw new \RuntimeException("Controller not found: ".$this->controller);
