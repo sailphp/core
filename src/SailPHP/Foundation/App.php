@@ -48,9 +48,9 @@ class App
         $maxlifetime = 0;
         $path = '/';
         $domain = '';
-        $secure = $environment != 'development' ? true : false;
-        $httponly = $environment != 'development' ? true : false;
-        $samesite = $environment != 'development' ? 'strict' : 'lax';
+        $secure = $environment == 'production' ? true : false;
+        $httponly = $environment == 'production' ? true : false;
+        $samesite = $environment == 'production' ? 'strict' : 'lax';
 
 
         if (PHP_VERSION_ID < 70300) {
