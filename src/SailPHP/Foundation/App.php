@@ -42,6 +42,29 @@ class App
             $this->paths['base'].'/config',
             $this->getEnv()
         );
+        
+        $config = $this->container->get('config');
+        $environment = $config->get('app')['environment'] ?: 'production';
+        $maxlifetime = 0;
+        $path = '/';
+        $domain = '';
+        $secure = $environment != 'development' ? true : false;
+        $httponly = $environment != 'development' ? true : false;
+        $samesite = $environment != 'development' ? 'strict' : 'lax';
+
+
+        if (PHP_VERSION_ID < 70300) {
+            session_set_cookie_params($maxlifetime, $path.'; samesite='.$samesite, $domain, $secure, $httponly);
+        } else {
+            session_set_cookie_params(array(
+                'lifetime' => $maxlifetime,
+                'path' => $path,
+                'domain' => $domain,
+                'secure' => $secure,
+                'httponly' => $httponly,
+                'samesite' => $samesite
+            ));
+        }
 
         // If Session is injected into container, lets call session start
         if($this->container->has('session')) {
