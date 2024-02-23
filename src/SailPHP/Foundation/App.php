@@ -50,7 +50,7 @@ class App
         $domain = '';
         $secure = $environment == 'production' ? true : false;
         $httponly = $environment == 'production' ? true : false;
-        $samesite = $environment == 'production' ? 'strict' : 'lax';
+        $samesite = $environment == 'production' ? 'lax' : 'none';
 
 
         if (PHP_VERSION_ID < 70300) {
