@@ -19,7 +19,7 @@ class Csrf
 
     public function __construct($strength = 16, $prefix = "csrf")
     {
-        if($strength < 16) {
+        if ($strength < 16) {
             throw new RuntimeException("CSRF minimum strength needs to be 16.");
         }
 
@@ -29,7 +29,7 @@ class Csrf
 
     public function getToken()
     {
-        if(!isset($_SESSION['_'.$this->prefix])) {
+        if (!isset($_SESSION['_' . $this->prefix])) {
             return null;
         }
 
@@ -38,12 +38,12 @@ class Csrf
 
     public function generate()
     {
-        if(!isset($_SESSION['_'.$this->prefix])) {
+        if (!isset($_SESSION['_' . $this->prefix])) {
             $token = $this->newToken();
         } else {
-            $token = $_SESSION['_' . $this->prefix];     
+            $token = $_SESSION['_' . $this->prefix];
         }
-        
+
         return $token;
     }
 
@@ -51,11 +51,11 @@ class Csrf
     public function validate($value)
     {
         $token = $this->getToken();
-        if(is_null($token)) {
+        if (is_null($token)) {
             return false;
         }
 
-        if(function_exists('hash_equals')) {
+        if (function_exists('hash_equals')) {
             return hash_equals($token, $value);
         }
 
@@ -64,8 +64,8 @@ class Csrf
 
     public function newToken()
     {
-        $token = password_hash(random_bytes($this->strength), PASSWORD_BCRYPT);
-        $_SESSION['_'.$this->prefix] = $token;
+        $token = password_hash(bin2hex(random_bytes($this->strength)), PASSWORD_BCRYPT);
+        $_SESSION['_' . $this->prefix] = $token;
 
         return $token;
     }
@@ -74,5 +74,4 @@ class Csrf
     {
         $this->newToken();
     }
-    
 }
