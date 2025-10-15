@@ -67,6 +67,7 @@ class Route
         }
 
         unset($this->match['controller'], $this->match['_route']);
+        $params = $this->match;
 
         $response = call_user_func_array([$controller, $method], $params);
 
