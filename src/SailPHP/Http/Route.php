@@ -31,12 +31,12 @@ class Route
 
         $old = false;
         if (is_array($match['controller'])) {
-            $parts = $match['controller'];  
+            $parts = $match['controller'];
         } else {
             $old = true;
             $parts = explode('@', $this->match['controller']);
         }
-        
+
         if(!is_array($parts) || count($parts) != 2) {
             app()->notFound();
             die();
@@ -68,8 +68,13 @@ class Route
 
         unset($this->match['controller'], $this->match['_route']);
 
-        $params = $this->match;
-        return call_user_func_array([$controller, $method], $params);
+        $response = call_user_func_array([$controller, $method], $params);
+
+        if ($response instanceof \Symfony\Component\HttpFoundation\StreamedResponse) {
+            $response->send();
+            return;
+        }
+        return $response;
     }
 
     public function match()
