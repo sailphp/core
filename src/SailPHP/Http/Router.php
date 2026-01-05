@@ -8,7 +8,6 @@
 
 namespace SailPHP\Http;
 
-use SailPHP\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -23,6 +22,8 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class Router extends RouteCollection
 {
+    protected $requirements = [];
+
     /**
      * Stores the request context for
      * this router.
@@ -45,6 +46,7 @@ class Router extends RouteCollection
 
     private $allowedMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
 
+    protected $lastRoute = null;
     protected $path = null;
     protected $name = null;
 
@@ -119,8 +121,9 @@ class Router extends RouteCollection
         $routeName = $options['name'];
         $this->name = $routeName;
         $options = ['controller' => $options['controller']];
-        $route = new Route($path, $options, [], [], '', [], $methodArr);
+        $route = new Route($path, $options, ['path' => '.*'], [], '', [], $methodArr);
         $this->add($routeName, $route);
+        $this->lastRoute = $route;
         $this->path = $path;
         return $this;
     }
@@ -267,6 +270,15 @@ class Router extends RouteCollection
         $data = $this->middlewares[$this->name];
 
         array_push($data, $middleware);
+
+        return $this;
+    }
+
+    public function where($param, $regex)
+    {
+        if ($this->lastRoute instanceof Route) {
+            $this->lastRoute->setRequirement($param, $regex);
+        }
 
         return $this;
     }
